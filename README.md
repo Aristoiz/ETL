@@ -25,8 +25,8 @@ CREATE TABLE factsales (
     idfecha   INTEGER REFERENCES dimfechas,
     idclient  INTEGER REFERENCES dimclients,
     idproduct INTEGER REFERENCES dimproducts,
-    sale_paid DOUBLE PRECISION,
-    articles  INTEGER,
+    sale_paid NUMERIC,
+    articles  NUMERIC,
     codigoventa INTEGER
 );
 ```
