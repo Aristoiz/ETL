@@ -30,7 +30,7 @@ CREATE TABLE factsales (
     codigoventa INTEGER
 );
 ```
-#Delete and restart serials
+Delete and restart serials
 ```sql
 delete from factSales;
 delete from dimclients;
