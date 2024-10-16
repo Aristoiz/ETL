@@ -1,5 +1,6 @@
 package org.example;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,10 +18,14 @@ public class dimProducts {
             while (rs.next()) {
                 product.add(new String[]{rs.getString("product")});
             }
-            for (String[] prod : product) {
-                System.out.println(prod[0]);
-                Statement stmt2 = connDWH.getConection().createStatement();
-                stmt2.executeUpdate("INSERT INTO dimProducts(product) VALUES ('" + prod[0] + "');");
+            try (PreparedStatement stmt2 = connDWH.getConection().prepareStatement("INSERT INTO dimproducts(product) VALUES (?);")) {
+                for (String[] prod : product) {
+                    stmt2.setString(1, prod[0]);
+                    stmt2.addBatch();
+                }
+                stmt2.executeBatch();
+            }catch (SQLException e) {
+                System.out.println("Error: " + e.getMessage());
             }
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());

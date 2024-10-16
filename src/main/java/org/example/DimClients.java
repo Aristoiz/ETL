@@ -14,9 +14,9 @@ public class DimClients {
         ArrayList<String[]> clients = new ArrayList<>();
         try {
             Statement stmt = conn.getConection().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM client order by id_client;");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM client;");
             while (rs.next()) {
-                clients.add(new String[]{rs.getString("id_client"), rs.getString("country"),
+                clients.add(new String[]{rs.getString("first_name"),rs.getString("last_name"), rs.getString("country"),
                         rs.getString("job_title"), rs.getString("gender")});
             }
         } catch (SQLException e) {
@@ -24,18 +24,20 @@ public class DimClients {
         }
 
         // INSERT INTO client_dwh (country, job, gender)
-
-        try {
-            PreparedStatement stmt = connDWH.getConection().prepareStatement("INSERT INTO dimclients(country, job_title, gender) VALUES (?, ?, ?);");
+        String insertQuery = "INSERT INTO dimclients(name, lastname, country, job_title,gender) VALUES (?,?,?,?,?);";
+        try (PreparedStatement stmt = connDWH.getConection().prepareStatement(insertQuery)) {
             for (String[] client : clients) {
-                System.out.println(client[3]);
-                stmt.setString(1, client[1]);
-                stmt.setString(2, client[2]);
-                stmt.setString(3, client[3]);
-                stmt.executeUpdate();
+                stmt.setString(1, client[0]);
+                stmt.setString(2, client[1]);
+                stmt.setString(3, client[2]);
+                stmt.setString(4, client[3]);
+                stmt.setString(5, client[4]);
+                stmt.addBatch();
             }
-        }catch (SQLException e) {
+            stmt.executeBatch();
+        }catch(SQLException e){
             System.out.println("Error: " + e.getMessage());
         }
+
     }
 }

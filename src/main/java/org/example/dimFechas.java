@@ -1,5 +1,6 @@
 package org.example;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -15,10 +16,15 @@ public class dimFechas {
             while (rs.next()) {
                 fechas.add(new String[]{rs.getString(1), rs.getString(2)});
             }
-            for (String[] fecha : fechas) {
-                System.out.println(fecha[0] + " " + fecha[1]);
-                Statement stmt2 = connDWH.getConection().createStatement();
-                stmt2.executeUpdate("INSERT INTO dimFechas(anio, mes) VALUES (" + fecha[0] + ", " + fecha[1] + ");");
+            try(PreparedStatement stmt2 = connDWH.getConection().prepareStatement("INSERT INTO dimfechas(anio,mes) VALUES (?,?);")){
+                for (String[] fecha : fechas) {
+                    stmt2.setInt(1, Integer.parseInt(fecha[0]));
+                    stmt2.setInt(2, Integer.parseInt(fecha[1]));
+                    stmt2.addBatch();
+                }
+                stmt2.executeBatch();
+            }catch (Exception e){
+                System.out.println("Error: " + e.getMessage());
             }
 
         } catch (Exception e) {

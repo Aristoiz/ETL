@@ -2,6 +2,7 @@
 ```sql
 CREATE TABLE dimclients (
     idclient  SERIAL PRIMARY KEY,
+    nombre    VARCHAR(100),
     country   VARCHAR(255),
     job_title VARCHAR(255),
     gender    VARCHAR(10)

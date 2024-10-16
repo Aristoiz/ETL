@@ -14,8 +14,8 @@ public class ConexionDWH {
         try {
             String url ="jdbc:postgresql://localhost:5432/sales_dwh";
             Properties properties = new Properties();
-            properties.setProperty("user", "*******");
-            properties.setProperty("password", "****");
+            properties.setProperty("user", "aristoiz");
+            properties.setProperty("password", "1234");
             Connection conn = DriverManager.getConnection(url, properties);
             return conn;
         }
