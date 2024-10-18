@@ -38,6 +38,8 @@ delete from dimclients;
 select pg_get_serial_sequence('dimclients', 'idclient');
 alter sequence dimclients_idclient_seq restart with 1;
 delete from dimfechas;
+select pg_get_serial_sequence('dimfechas', 'idfecha');
+alter sequence dimfechas_idfecha_seq restart with 1;
 delete from dimproducts;
 select pg_get_serial_sequence('dimproducts', 'idproduct');
 alter sequence dimproducts_idproduct_seq restart with 1;
